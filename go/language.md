@@ -29,7 +29,8 @@ const nihongo = "日本語"
 for index, runeValue := range nihongo {
 	fmt.Printf("%#U starts at byte position %d\n", runeValue, index) // index - 0,3,6
 }
-```	
+```
+- пакет *strings* для работы со строками: *strings.Join*, *strings.Split*, *strings.ReplaceAll*, *strings.HasPrefix*, *strings.HasSuffix*, *strings.Contais*, *strings.Count* - количество вхождений подстроки в строке
 ## Указатели
 - Указатель - это переменная, которая содержит адрес объекта.
 - \& - получить адрес переменной
