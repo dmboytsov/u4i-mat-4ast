@@ -30,6 +30,7 @@ for index, runeValue := range nihongo {
 	fmt.Printf("%#U starts at byte position %d\n", runeValue, index) // index - 0,3,6
 }
 ```
+- конкатенация строк `str = str + "оп"
 - пакет **strings** для работы со строками: **strings.Join**, **strings.Split**, **strings.ReplaceAll**, **strings.HasPrefix**, **strings.HasSuffix**, **strings.Contais**, **strings.Count** - количество вхождений подстроки в строке
 ## Указатели
 - Указатель - это переменная, которая содержит адрес объекта.
