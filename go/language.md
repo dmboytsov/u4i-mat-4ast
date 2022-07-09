@@ -23,6 +23,13 @@ for _, e := range s {
 	}
 }
 ```
+- при итерации индекс, это порядковый номер байта с которого начинается руна.
+```
+const nihongo = "日本語"
+for index, runeValue := range nihongo {
+	fmt.Printf("%#U starts at byte position %d\n", runeValue, index) // index - 0,3,6
+}
+```	
 ## Указатели
 - Указатель - это переменная, которая содержит адрес объекта.
 - \& - получить адрес переменной
