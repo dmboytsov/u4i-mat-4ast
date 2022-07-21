@@ -61,10 +61,55 @@ type iface struct {
 ```
 
 ## Слайсы
+//TODO
 
 ## Map
+//TODO
 
 ## Каналы
+//TODO
+- нельзя писать в закрытй канал будет паника,
+- читать можно из закрытого канала. При чтение из канала возвращается две переменные значение и ok. если все вычитали и канал закрыт то значение будет значение по умолчанию, *ok* - будет *false* okстановиться false не когда канал закрыли, а когда из него все дочитали
+```go
+func write(c chan int) {
+	for i := 1; i < 1000; i++ {
+		c <- i
+	}
+	close(c)
+	fmt.Println("chan is closed")
+}
+
+func main() {
+	var c = make(chan int, 1000)
+	go write(c)
+
+	for {
+		v, ok := <-c
+		fmt.Printf("v %v, ok %v.", v, ok)
+		if ok == false {
+			break // тут val = 0, ok - false
+		}
+	}
+}
+```
+- если канал не закрыть, то можем получить дедлок, программа будет ждать новых значений в канале
+```go
+func write(c chan int) {
+	for i := 1; i < 100; i++ {
+		c <- i
+	}
+	// close(c) // с закрытием паники не будет, без закрытия горутины повиснет в ожидание и будет паника "fatal error: all goroutines are asleep"
+}
+
+func main() {
+	var c = make(chan int)
+	go write(c)
+
+	for v := range c {
+		fmt.Printf("%d, ", v)
+	}
+}
+```
 
 ## Структуры
 // TODO
