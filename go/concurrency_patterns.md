@@ -8,7 +8,7 @@
 // TODO пример
 
 # Semaphore
-// TODO
+// TODO, похоже на вейтгруппу
 
 # Канал Done
 // TODO
