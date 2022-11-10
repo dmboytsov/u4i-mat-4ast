@@ -19,5 +19,14 @@
 # Monitor
 //? TODO не очень понял суть, погуглить, типа объект который следит за правильной работой остальных объектов
 
+# Генераторы, 
+//TODO
+# Fan-In
+//TODO
+# Fan-Out
+//TODO
+# Управляющий канал и тд
+//TODO
 
 # Ссылки
+- https://medium.com/@thejasbabu/concurrency-patterns-golang-5c5e1bcd0833
