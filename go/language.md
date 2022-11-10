@@ -235,7 +235,5 @@ m.RUnlock() // снимаеи блокировку
 ```
 
 ## Горутины
-## Паттерны конкурентного программирования
-https://medium.com/@thejasbabu/concurrency-patterns-golang-5c5e1bcd0833
-- Генераторы, Fan-In, Fan-Out, Управляющий канал и тд
+//TODO
 
