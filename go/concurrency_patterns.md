@@ -53,3 +53,4 @@ func main() {
 - https://medium.com/@thejasbabu/concurrency-patterns-golang-5c5e1bcd0833
 - семафор - https://medium.com/@deckarep/gos-extended-concurrency-semaphores-part-1-5eeabfa351ce
 - взвешенный семафор - https://pkg.go.dev/golang.org/x/sync/semaphore
+- http://www.golangpatterns.info/functional/closures
