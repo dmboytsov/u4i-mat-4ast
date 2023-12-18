@@ -6,3 +6,4 @@
 
 # Полезные ресурсы
 - 50 оттенокв го - не очевидные вещи го - https://habr.com/ru/company/vk/blog/314804/
+- стайл гайд - https://google.github.io/styleguide/go/decisions
