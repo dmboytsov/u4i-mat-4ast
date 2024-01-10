@@ -50,6 +50,7 @@ func main() {
 //TODO
 
 # Ссылки
+- сборник патернов на английском - https://github.com/iamuditg/go-concurrency-patterns
 - https://medium.com/@thejasbabu/concurrency-patterns-golang-5c5e1bcd0833
 - семафор - https://medium.com/@deckarep/gos-extended-concurrency-semaphores-part-1-5eeabfa351ce
 - взвешенный семафор - https://pkg.go.dev/golang.org/x/sync/semaphore
