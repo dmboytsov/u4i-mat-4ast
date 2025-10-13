@@ -48,6 +48,7 @@ func main() {
 //TODO
 # Управляющий канал и тд
 //TODO
+# Future/Promise
 
 # Ссылки
 - сборник патернов на английском - https://github.com/iamuditg/go-concurrency-patterns
