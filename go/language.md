@@ -74,6 +74,10 @@ m[Skey{id: 1, name: "one"}] = 1
 m[Skey{id: 1, name: "one"}] = 2
 m[Skey{id: 1, name: "one"}] = 3  // будет map[{1 one}:3]
 ```
+- удалить из мапы
+```go
+delete(m, k)  //  удалить элемент m[k] из карты m
+```
 
 ## Каналы
 //TODO
