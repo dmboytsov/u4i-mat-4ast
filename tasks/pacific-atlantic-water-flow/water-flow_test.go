@@ -1,6 +1,28 @@
 package main
 
+// https://leetcode.com/problems/pacific-atlantic-water-flow/description/
+//
+// Данна матрица, где значения это высоты.
+// Слева и сверху аталнтический океан, снизу и справа тихий, нужно вычислить водораздел.
+// Водораздел это элементы матрицы, с которых вода может стечь и в атлантический и в тихий океан.
+//
+//  1 1 2
+//  1 2 1
+//  1 2 1  => [ [0,2], [1,1] [2,1], [2,0] ]
+//
+// Решение.
+// С крайних точек вода может стекать в океан. То есть как минимум для каждой крайней точки достежим хотябы один океан.
+// Первой строчке достежим атлантический океан
+// Последней строчке достежим тихий
+// Первый элементам в строке достежим атлантический
+// Поселдним элементам достежим тихий
+// Нижний левый элемент, с него доступен  и тихий и атлантический, поэтому с него начинам обход (можно и в верхнего правого)
+// Идем налево и в верх, (не ходим по кругу, чтобы не зациклиться)
+// На кажом шаге смотрим на соседей сравниваем ввысоты и копируем доступность океанов если элемент выше (по высоте),
+// значит ему доступно все то что для нижнего.
+
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -17,39 +39,35 @@ func waterFlow(heights [][]int) [][]int {
 	}
 
 	points := heightsToPoints(heights)
-	// начинаем обход с середины и по спирали расскручиваем
-	points[len(heights)-1][0].p = 1
-	points[len(heights)-1][0].a = 1
-	dfs(int(len(points)/2), int(len(points[0])/2), points)
+	//printPoints(points) //debug
+	// обход матрицы, идем снизу слева
+	dfs(len(points)-1, 0, points)
+	//printPoints(points) //debug
 	return getWaterFlow(points)
 }
 
-// с нижне левого угла нужно идти по часовой стрелке, видимо напрлавлене нужно передавать, если уперлись в точку которая уже пройдена,
+// Метод для отдалки
+func printPoints(points [][]Point) {
+	for _, row := range points {
+		for _, point := range row {
+			fmt.Printf("[a:%d, p:%d, h:%d] ", point.a, point.p, point.h)
+		}
+		fmt.Println()
+	}
+}
+
+// Метод обхода матрицы
+// с нижне левого угла нужно идти, так как с него всегда жоступны два океана
+// используем направеление в право и вверх (влево и вниз не ходим чтобы не зациклиться)
+// ?по часовой стрелке, видимо напрлавлене нужно передавать, если уперлись в точку которая уже пройдена,
 // то меняем направление
 func dfs(r, c int, points [][]Point) {
 	curP := &points[r][c]
 	var rightP, leftP, topP, bottomP *Point
-	if curP.p != 0 && curP.a != 0 {
-		// эту точку уже обошли
-		return
-	}
-	// смотрим точки в округе, если высота меньше всех точек в округе то нельзя ничего из этой точки достичь
-	// right
-	if c == len(points[r])-1 { // это крайняя правая точка и с нее достигаем тихий океан
-		curP.p = 1
-	} else {
-		rightP = &points[r][c+1]
-		swapOceans(curP, rightP)
-	}
-	// top
-	if r == 0 {
-		curP.a = 1 // верхняя точка достежим атлантисеский океан
-	} else {
-		topP = &points[r-1][c]
-		swapOceans(curP, topP)
-	}
-	// left
-	if c == 0 { // это крайняя левая точка и с нее достигаем ытлантический океан
+
+	// смотрим точки в округе, если высота меньше всех точек в округе, то нельзя ничего из этой точки достичь
+	// left // сначала смотрим на левую точку, так как мы идем слева на право и левая точка уже вычеслина на пред шаге
+	if c == 0 { // это крайняя левая точка и с нее достигаем атлантический океан
 		curP.a = 1
 	} else {
 		leftP = &points[r][c-1]
@@ -64,7 +82,22 @@ func dfs(r, c int, points [][]Point) {
 		swapOceans(curP, bottomP)
 	}
 
-	// если ниже всех, то не достежим
+	// right
+	if c == len(points[r])-1 { // это крайняя правая точка и с нее достигаем тихий океан
+		curP.p = 1
+	} else {
+		rightP = &points[r][c+1]
+		swapOceans(curP, rightP)
+	}
+	// top
+	if r == 0 {
+		curP.a = 1 // верхняя точка достежим атлантисеский океан
+	} else {
+		topP = &points[r-1][c]
+		swapOceans(curP, topP)
+	}
+
+	// Если ниже всех, то не достежим
 	if rightP != nil && leftP != nil && topP != nil && bottomP != nil {
 		if curP.h < rightP.h && curP.h < leftP.h && curP.h < topP.h && curP.h < bottomP.h {
 			curP.a = -1
@@ -72,17 +105,13 @@ func dfs(r, c int, points [][]Point) {
 		}
 	}
 
+	// идем с лева на право
 	if rightP != nil {
 		dfs(rightP.r, rightP.c, points)
 	}
+	// снизу вверх
 	if topP != nil {
 		dfs(topP.r, topP.c, points)
-	}
-	if leftP != nil {
-		dfs(leftP.r, leftP.c, points)
-	}
-	if bottomP != nil {
-		dfs(bottomP.r, bottomP.c, points)
 	}
 
 	// обошли соседей, и из никого не получилось достичь океанов ставим -1
@@ -94,16 +123,17 @@ func dfs(r, c int, points [][]Point) {
 	}
 }
 
-// копируем доступность океанов с болле низкоц
+// копируем доступность океанов с болле низкой
 func swapOceans(aPoint, bPoint *Point) {
-	if bPoint.h >= aPoint.h { // b выше a значит все что доступно a то и доступно b
+	if bPoint.h >= aPoint.h { // b выше  a, значит все что доступно a. то и доступно b
 		if aPoint.p == 1 {
 			bPoint.p = 1
 		}
 		if aPoint.a == 1 {
 			bPoint.a = 1
 		}
-	} else { // cur выше. Значит a выше копируем доступность с b
+	}
+	if aPoint.h >= bPoint.h { // a выше  b, значит все что доступно b, то и доступно a
 		if bPoint.p == 1 {
 			aPoint.p = 1
 		}
@@ -113,6 +143,7 @@ func swapOceans(aPoint, bPoint *Point) {
 	}
 }
 
+// Матрицу высот переобразуем в матрицу структур Point. Крайним вершинам проставляем доступность океана
 func heightsToPoints(heights [][]int) [][]Point {
 	res := make([][]Point, len(heights))
 	for i, row := range heights {
@@ -138,8 +169,9 @@ func heightsToPoints(heights [][]int) [][]Point {
 	return res
 }
 
+// выбирает точки с коткорых доступны тихий и атлантический океан
 func getWaterFlow(points [][]Point) [][]int {
-	res := make([][]int, len(points))
+	res := make([][]int, 0, len(points))
 	for i, row := range points {
 		for j, point := range row {
 			if point.a == 1 && point.p == 1 {
@@ -150,6 +182,7 @@ func getWaterFlow(points [][]Point) [][]int {
 	return res
 }
 
+// Запуск и проверка кейсов
 func TestWaterFlow(t *testing.T) {
 	type tcase struct {
 		heights [][]int
@@ -158,12 +191,49 @@ func TestWaterFlow(t *testing.T) {
 	cases := []tcase{
 		{
 			heights: [][]int{
-				{1, 2, 3, 2, 1},
-				{1, 2, 3, 2, 1},
-				{1, 2, 3, 2, 1},
+				{1, 1, 2},
+				{1, 2, 1},
+				{2, 1, 1},
 			},
 			expect: [][]int{
-				{0, 2}, {1, 2}, {2, 2},
+				{0, 2}, {1, 1}, {2, 0},
+			},
+		},
+		//{
+		//	heights: [][]int{
+		//		{1, 3, 1},
+		//		{2, 3, 2},
+		//		{1, 3, 1},
+		//	},
+		//	expect: [][]int{
+		//		{0, 1}, {0, 2}, {1, 1}, {2, 0}, {2, 1},
+		//	},
+		//},
+		//{
+		//	heights: [][]int{
+		//		{1, 2, 3, 2, 1},
+		//		{1, 2, 3, 2, 1},
+		//		{1, 2, 3, 2, 1},
+		//	},
+		//	expect: [][]int{
+		//		{0, 2}, {1, 2}, {2, 0}, {2, 1}, {2, 2},
+		//	},
+		//},
+		// из примера - https://algo.monster/liteproblems/pacific-atlantic-water-flow
+		{
+			heights: [][]int{
+				{1, 2, 2, 3, 5},
+				{3, 2, 3, 4, 4},
+				{2, 4, 5, 3, 1},
+				{6, 7, 1, 4, 5},
+				{5, 1, 1, 2, 4},
+			},
+			expect: [][]int{
+				{0, 4},
+				{1, 3}, {1, 4},
+				{2, 2},
+				{3, 0}, {3, 1},
+				{4, 0},
 			},
 		},
 	}
@@ -173,6 +243,5 @@ func TestWaterFlow(t *testing.T) {
 		if !reflect.DeepEqual(got, c.expect) {
 			t.Errorf("case %v, got %d, want %d", c, got, c.expect)
 		}
-
 	}
 }

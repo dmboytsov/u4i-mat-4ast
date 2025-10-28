@@ -1,6 +1,13 @@
 # Алгоритмы
 [algorithms.md](algorithms.md)
 
+# Графы
+[graphes.md](graphes.md)
+
+# Списки
+
+# Реализации рейт лимитов
+
 # Структуры данных
 [data-structures.md](data-structures.md)
 
