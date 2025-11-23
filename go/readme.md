@@ -5,5 +5,6 @@
 [codereview.md](codereview.md)
 
 # Полезные ресурсы
+- книга "100 ошибок Go и как их избежать" - Тейва Харшани. // Хорошая книга, без воды, много неочевидностей разбирает.
 - 50 оттенокв го - не очевидные вещи го - https://habr.com/ru/company/vk/blog/314804/
 - стайл гайд - https://google.github.io/styleguide/go/decisions
