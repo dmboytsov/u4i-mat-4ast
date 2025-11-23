@@ -34,6 +34,14 @@ for index, runeValue := range nihongo {
 ```
 - конкатенация строк `str = str + "оп"
 - пакет **strings** для работы со строками: **strings.Join**, **strings.Split**, **strings.ReplaceAll**, **strings.HasPrefix**, **strings.HasSuffix**, **strings.Contais**, **strings.Count** - количество вхождений подстроки в строке
+- **strconv** - пакет для конвертации строк в простые типы данных и обратно - https://pkg.go.dev/strconv
+```go
+i, err := strconv.Atoi("-42") // строку в инт
+s := strconv.Itoa(-42) // инт в сторку
+
+b, err := strconv.ParseBool("true") // строку в бул
+s := strconv.FormatBool(true) // бул в строку // для остальных типов аналогично, но есть доп параметры
+```
 
 ## Указатели
 - Указатель - это переменная, которая содержит адрес объекта.
