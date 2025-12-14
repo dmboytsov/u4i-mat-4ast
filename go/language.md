@@ -347,7 +347,19 @@ m.RUnlock() // снимаеи блокировку
 
 # Работа с консолью.
 ## Взять ввод
+- Есть объект *os.Stdin*, который реализует интерфейс *io.Reader*
+- можно через fmt
+```go
+var name string
+fmt.Fscan(os.Stdin, &name) 
+```
+- bufio
+```go
+reader := bufio.NewReader(os.Stdin)
+name, _ := reader.ReadString('\n')
+```
 // TODO
+## Флаги, аргументы
 
 ## Вывод
 // TODO
