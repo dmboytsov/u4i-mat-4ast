@@ -47,7 +47,7 @@ s := strconv.FormatBool(true) // бул в строку // для остальн
 - Указатель - это переменная, которая содержит адрес объекта.
 - \& - получить адрес переменной
 - \* - разименование указателя - доступ к переменной на которую указывает указатель, также используется в объявлениях типов
-```
+```go
 i := 1
 p := &i  // p указатель на i
 k := i   // k новая переменная значение скопирована с i
@@ -152,7 +152,9 @@ valAddr := &m[key] // ошибка компиляции
 ## Каналы
 //TODO
 - нельзя писать в закрытй канал будет паника,
-- читать можно из закрытого канала. При чтение из канала возвращается две переменные значение и ok. если все вычитали и канал закрыт то значение будет значение по умолчанию, *ok* - будет *false* ok становиться false не когда канал закрыли, а когда из него все дочитали
+- читать можно из закрытого канала. При чтение из канала возвращается две переменные значение и ok. 
+если все вычитали и канал закрыт то значение будет значение по умолчанию,
+*ok* - будет *false* ok становиться false не когда канал закрыли, а когда из него все дочитали
 ```go
 func write(c chan int) {
 	for i := 1; i < 1000; i++ {
@@ -263,7 +265,6 @@ func withDefer() {
 ## Select
 // TODO
 
-
 # Context
 - https://go.dev/blog/context
 - https://betterprogramming.pub/understanding-context-in-golang-7f574d9d94e0
@@ -363,4 +364,36 @@ name, _ := reader.ReadString('\n')
 
 ## Вывод
 // TODO
+
+# Сортировка пакет sort
+- простой пример
+```go
+sort.Slice(people, func(i, j int) bool {
+	return people[i].Age > people[j].Age
+})
+```
+- можно еще так, и для float64 тоже
+```go
+sort.Ints(s)
+sort.Float64s(f)
+```
+- интерфейс для сортировки
+```go
+type Interface interface {
+	// Len is the number of elements in the collection.
+    Len() int
+	Less(i, j int) bool
+	// Swap swaps the elements with indexes i and j.
+	Swap(i, j int)
+}
+// Пример
+type ByAge []Person
+
+func (a ByAge) Len() int           { return len(a) }
+func (a ByAge) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByAge) Less(i, j int) bool { return a[i].Age < a[j].Age }
+
+// Использование
+sort.Sort(ByAge(people))
+```
 
