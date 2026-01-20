@@ -14,7 +14,7 @@
 - имутабельны - нельзя редактировать, не изменяемый массив байт
 - Len покажет колво байт. *utf8.RuneCountInString* колво символов
 - при итерации по строке элемент это *rune*
-```
+```go
 s := "пам"
 for _, e := range s {
 	if e == 'п' {
@@ -26,7 +26,7 @@ for _, e := range s {
 }
 ```
 - при итерации индекс, это порядковый номер байта с которого начинается руна.
-```
+```go
 const nihongo = "日本語"
 for index, runeValue := range nihongo {
 	fmt.Printf("%#U starts at byte position %d\n", runeValue, index) // index - 0,3,6
@@ -129,15 +129,31 @@ default:
 
 ## Слайсы
 //TODO
+- // TODO устройство и иницивлизация
+- c go 1.21 появился пакет slices в нем есть методы sort, equal (но слайс должен быть из сравнимых(comparable) типов)
 
 ## Map
 //TODO
 - ключ значениие, порядок элементов не гарантирован
+- взять элемент мапы. Если элемента в мапе нету вернет дефолтное значение. Поэтому есть два варианта
+```go
+age, ok := ages["Alice"] // ok говорит есть элемент или нету
+age := ages["Alice"] // Элемента может не быть и получим дефолтное значение
+```
+- при создании через make можно указать capacity
+```go
+m := make(map[int]string, 100)
+```
 - можно в качестве ключа использовать структуру
 ```go
 m[Skey{id: 1, name: "one"}] = 1
 m[Skey{id: 1, name: "one"}] = 2
 m[Skey{id: 1, name: "one"}] = 3  // будет map[{1 one}:3]
+```
+- итерация по мапе
+```go
+for key, value := range myMap { .... }
+for key := range myMap { .... }
 ```
 - удалить из мапы
 ```go
@@ -253,7 +269,43 @@ func withDefer() {
 ```
 - если defer-ов несколько то они будут вызываться по принципу стека (первый дефер будет последним)
 ## Switch
-// TODO
+- стандартное использование
+```go
+switch os := runtime.GOOS; os {
+    case "darwin":
+        fmt.Println("macOS.")
+    case "linux":
+        fmt.Println("Linux.")
+    default:
+        // freebsd, openbsd,
+        // plan9, windows...
+        fmt.Printf("%s.\n", os)
+}
+```
+- в `case` может быть выражение, или вызов функции
+- можно без значения, неточное равенство
+```go
+switch {
+    case t == target:
+        fmt.Println("equal")
+    case t > target:
+        fmt.Println("great")
+    case t < target:
+        fmt.Println("less")
+}
+```
+- если под условие попадают два кейса, то отработает только один, перый
+```go
+v := 5
+switch {
+	case v > 3:
+		fmt.Println("var > 3") // этот отработает
+	case v > 4:
+		fmt.Println("var > 4") // а этот не выпонлиться
+	default:
+		fmt.Println("default")
+}
+```
 ## Циклы (for)
 - есть только цикл *for*, но его можно использовать как while
 - аля foreach - `for <индек>, <элемент> := range l {...`
@@ -261,7 +313,7 @@ func withDefer() {
 - аля while - `for <true - проодолжаем цикл> {...`
 - бесконечный цикл - `for {...`
 - итерация по индексу `for i := 0; i < len(l); i++ {...`
-- итерация по индексу несколько индексов - `for i, j := 0, 100; i < len(l); i, j = i+1, j-1 {`
+- итерация по индексу, несколько индексов - `for i, j := 0, 100; i < len(l); i, j = i+1, j-1 {`
 ## Select
 // TODO
 
@@ -345,6 +397,7 @@ m.RUnlock() // снимаеи блокировку
 //TODO
 
 ### Пакет sync atomic
+//TODO
 
 # Работа с консолью.
 ## Взять ввод
@@ -377,6 +430,7 @@ sort.Slice(people, func(i, j int) bool {
 sort.Ints(s)
 sort.Float64s(f)
 ```
+- с go 1.21 появился пакет slices
 - интерфейс для сортировки
 ```go
 type Interface interface {
